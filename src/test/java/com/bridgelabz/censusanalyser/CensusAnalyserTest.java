@@ -13,6 +13,7 @@ public class CensusAnalyserTest {
     private static final String WRONG_FILE_HEADER_PATH = "./src/test/resources/IndiaNewCensus.csv";
     private static final String INDIA_STATE_CODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.csv";
     private static final String WRONG_CSV_FILE_STATE = "./src/main/resources/IndiaStateCode.csv";
+    private static final String WRONG_CSV_FILE_TYPE_STATE = "./src/test/resources/IndiaStateCode.txt";
 
     /*Test Method for Welcome Message*/
     @BeforeClass
@@ -99,6 +100,18 @@ public class CensusAnalyserTest {
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(CensusAnalyserException.class);
             censusAnalyser.loadIndiaStateData(WRONG_CSV_FILE_STATE);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+        }
+    }
+    /*Sad Test Case to return Custom Exception if StateCodeCSV file type is incorrect*/
+    @Test
+    public void givenWrongStateCodeFileTypeReturnsException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaStateData(WRONG_CSV_FILE_TYPE_STATE);
         } catch (CensusAnalyserException e) {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
