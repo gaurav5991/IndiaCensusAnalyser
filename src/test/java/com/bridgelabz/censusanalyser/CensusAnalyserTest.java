@@ -15,15 +15,16 @@ public class CensusAnalyserTest {
     private static final String WRONG_CSV_FILE_STATE = "./src/main/resources/IndiaStateCode.csv";
     private static final String WRONG_CSV_FILE_TYPE_STATE = "./src/test/resources/IndiaStateCode.txt";
     private static final String WRONG_CSV_FILE_DELIMITER_STATE = "./src/test/resources/IndianStateCode.csv";
-    private static final String WRONG_CSV_FILE_HEADER_STATE ="./src/test/resources/NewIndianStateCode.csv" ;
+    private static final String WRONG_CSV_FILE_HEADER_STATE = "./src/test/resources/NewIndianStateCode.csv";
 
     /*Test Method for Welcome Message*/
     @BeforeClass
-    public static void beforeClass() throws Exception {
+    public static void beforeClass() {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         boolean message = censusAnalyser.printWelcomeMessage();
         Assert.assertTrue(message);
     }
+
     /*Test Method to check number of entries*/
     @Test
     public void givenIndianCensusCSVFileReturnsCorrectRecords() {
@@ -31,10 +32,9 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             int numOfRecords = censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(29, numOfRecords);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
+        } catch (CensusAnalyserException e) { }
     }
+
     /*Sad Test Case to return Custom Exception if file is incorrect*/
     @Test
     public void givenIndiaCensusDataWithWrongFileShouldThrowException() {
@@ -47,6 +47,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if file type is incorrect*/
     @Test
     public void givenIndiaCensusDataWithWrongTypeShouldThrowException() {
@@ -59,6 +60,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if file Delimiter is incorrect*/
     @Test
     public void givenIndiaCensusDataWithWrongDelimiterShouldThrowException() {
@@ -71,6 +73,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if CSV Header is incorrect*/
     @Test
     public void givenIndiaCensusDataWithWrongHeaderShouldThrowException() {
@@ -83,17 +86,17 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
     }
+
     /*Test Case to validate number of entries in state Code csv file*/
     @Test
     public void givenStatesReturnsCorrectRecords() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             int numOfRecords = censusAnalyser.loadIndiaStateData(INDIA_STATE_CODE_CSV_FILE_PATH);
-            Assert.assertEquals(37,numOfRecords);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
+            Assert.assertEquals(37, numOfRecords);
+        } catch (CensusAnalyserException e) { }
     }
+
     /*Sad Test Case to return Custom Exception if StateCodeCSV file is incorrect or do not exists*/
     @Test
     public void givenWrongStateCodeFileReturnsException() {
@@ -106,6 +109,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.STATE_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if StateCodeCSV file type is incorrect*/
     @Test
     public void givenWrongStateCodeFileTypeReturnsException() {
@@ -118,6 +122,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.STATE_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if StateCodeCSV file Delimiter is incorrect*/
     @Test
     public void givenWrongStateCodeFileWithWrongDelimiterReturnsException() {
@@ -130,6 +135,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.STATE_FILE_PROBLEM, e.type);
         }
     }
+
     /*Sad Test Case to return Custom Exception if StateCode CSV Header is incorrect*/
     @Test
     public void givenStateCodeFileWithWrongHeaderReturnsException() {
