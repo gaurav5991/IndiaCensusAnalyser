@@ -1,5 +1,8 @@
 package com.bridgelabz.censusanalyser;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -33,6 +36,21 @@ public class CensusAnalyser {
             return getCount(StateCSVIterator);
         } catch (IOException | RuntimeException | CSVBuilderException e) {
             throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.STATE_FILE_PROBLEM);
+        }
+    }
+
+    /*Method to implement CommonCSV to load state and india census data*/
+    public int loadIndiaStateOrCensusDataUsingCommonsCSV(String csvFilePath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
+            Iterator<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader()
+                    .withIgnoreHeaderCase()
+                    .withTrim()
+                    .parse(reader)
+                    .iterator();
+            return this.getCount(records);
+        } catch (IOException | RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
     }
 
