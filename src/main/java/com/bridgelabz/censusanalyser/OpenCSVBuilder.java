@@ -38,5 +38,4 @@ public class OpenCSVBuilder<E> implements ICSVBuilder {
                     CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
     }
-
 }

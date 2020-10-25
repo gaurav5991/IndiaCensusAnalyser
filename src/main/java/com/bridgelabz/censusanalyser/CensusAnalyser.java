@@ -1,12 +1,17 @@
 package com.bridgelabz.censusanalyser;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -57,6 +62,38 @@ public class CensusAnalyser {
         } catch (IOException | RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+    }
+
+    /*Method To Return JSON File Of States In Alphabetical Order*/
+    public String SortedStateWiseCensusData() throws CensusAnalyserException {
+        try (Writer writer = new FileWriter("./src/test/resources/IndiaStateCensusDataJson.json")) {
+            if (censusCSVList == null || censusCSVList.size() == 0) {
+                throw new CensusAnalyserException("No data", CensusAnalyserException.ExceptionType.NO_DATA);
+            }
+            Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.state);
+            this.sort(censusComparator);
+            String json = new Gson().toJson(censusCSVList);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusCSVList, writer);
+            return json;
+
+        } catch (RuntimeException | IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.FILE_OR_HEADER_PROBLEM);
+        }
+    }
+    /*Method to sort based on comparator*/
+    public void sort(Comparator<IndiaCensusCSV> censusComparator) {
+        for (int firstcounter = 0; firstcounter < censusCSVList.size() - 1; firstcounter++) {
+            for (int secondcounter = 0; secondcounter < censusCSVList.size() - firstcounter - 1; secondcounter++) {
+                IndiaCensusCSV census1 = censusCSVList.get(secondcounter);
+                IndiaCensusCSV census2 = censusCSVList.get(secondcounter + 1);
+                if (censusComparator.compare(census1, census2) > 0) {
+                    censusCSVList.set(secondcounter, census2);
+                    censusCSVList.set(secondcounter + 1, census1);
+                }
+            }
         }
     }
 
