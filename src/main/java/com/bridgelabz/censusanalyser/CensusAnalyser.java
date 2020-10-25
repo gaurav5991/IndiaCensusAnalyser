@@ -96,7 +96,36 @@ public class CensusAnalyser {
             }
         }
     }
+    /*Method To Return JSON File Of States According to State Code*/
+    public String StateCodeWiseSortedCensusData() throws CensusAnalyserException {
+        try (Writer writer = new FileWriter("./src/test/resources/IndiaStateCodeDataJson.json")) {
+            if (stateCSVList== null || stateCSVList.size() == 0) {
+                throw new CensusAnalyserException("No data", CensusAnalyserException.ExceptionType.NO_DATA);
+            }
+            Comparator<IndiaStateCSV> censusComparator = Comparator.comparing(state -> state.stateCode);
+            this.sortState(censusComparator);
+            String json = new Gson().toJson(stateCSVList);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(stateCSVList, writer);
+            return json;
 
+        } catch (RuntimeException | IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.FILE_OR_HEADER_PROBLEM);
+        }
+    }
+    private void sortState(Comparator<IndiaStateCSV> censusComparator) {
+        for (int firstcounter = 0; firstcounter < stateCSVList.size() - 1; firstcounter++) {
+            for (int secondcounter = 0; secondcounter < stateCSVList.size() - firstcounter - 1; secondcounter++) {
+                IndiaStateCSV census1 = stateCSVList.get(secondcounter);
+                IndiaStateCSV census2 = stateCSVList.get(secondcounter + 1);
+                if (censusComparator.compare(census1, census2) > 0) {
+                    stateCSVList.set(secondcounter, census2);
+                    stateCSVList.set(secondcounter + 1, census1);
+                }
+            }
+        }
+    }
     /* Generic Method to extract Count */
     private <E> int getCount(Iterator<E> iterator) {
         Iterable<E> csvIterable = () -> iterator;
