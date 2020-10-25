@@ -226,6 +226,7 @@ public class CensusAnalyserTest {
             e.printStackTrace();
         }
     }
+
     /*Test Case for Sorting India Census Data based on State Code in Json File*/
     @Test
     public void giveIndianStateData_WhenSortOnStateCode_ShouldReturnSortedResult() {
@@ -235,6 +236,34 @@ public class CensusAnalyserTest {
             String sortCensusData = censusAnalyser.StateCodeWiseSortedCensusData();
             IndiaStateCSV[] indiaStateCSV = new Gson().fromJson(sortCensusData, IndiaStateCSV[].class);
             Assert.assertEquals("AD", indiaStateCSV[0].stateCode);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+
+        }
+    }
+    /*Test Case for Sorting India Census Data based on State Population in Json File*/
+    @Test
+    public void giveIndianStateDataWhenSortOnPopulationShouldReturnMaximumPopulatedState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals(199812341, indiaCensusCSV[0].population);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+
+        }
+    }
+    /*Test Case for Sorting India Census Data based on State Population in Json File*/
+    @Test
+    public void giveIndianStateData_WhenSortOnPopulation_ShouldReturnMinimumPopulatesState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals(607688, indiaCensusCSV[indiaCensusCSV.length - 1].population);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
 
