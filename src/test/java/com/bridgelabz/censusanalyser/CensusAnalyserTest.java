@@ -1,5 +1,6 @@
 package com.bridgelabz.censusanalyser;
 
+import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -194,6 +195,33 @@ public class CensusAnalyserTest {
             censusAnalyser.loadIndiaStateOrCensusDataUsingCommonsCSV(WRONG_FILE_TYPE_PATH);
         } catch (CensusAnalyserException e) {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+        }
+    }
+    /*Test Case for Sorting India Census Data based on State of Json File*/
+    @Test
+    public void giveIndianCensusDataWhenSortOnStateShouldReturnSortedResult() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.SortedStateWiseCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals("Andhra Pradesh", indiaCensusCSV[0].state);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+
+        }
+    }
+    /*Test Case for Sorting India Census Data based on State of Json File*/
+    @Test
+    public void giveIndianCensusDataWhenSortOnStateShouldReturnExpectedSortedResult() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.SortedStateWiseCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals("West Bengal", indiaCensusCSV[indiaCensusCSV.length - 1].state);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
         }
     }
 }
