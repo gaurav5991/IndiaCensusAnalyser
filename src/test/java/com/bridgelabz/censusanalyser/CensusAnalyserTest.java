@@ -209,7 +209,6 @@ public class CensusAnalyserTest {
             Assert.assertEquals("Andhra Pradesh", indiaCensusCSV[0].state);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -238,9 +237,9 @@ public class CensusAnalyserTest {
             Assert.assertEquals("AD", indiaStateCSV[0].stateCode);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
-
         }
     }
+
     /*Test Case for Sorting India Census Data based on State Population in Json File*/
     @Test
     public void giveIndianStateDataWhenSortOnPopulationShouldReturnMaximumPopulatedState() {
@@ -252,9 +251,9 @@ public class CensusAnalyserTest {
             Assert.assertEquals(199812341, indiaCensusCSV[0].population);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
-
         }
     }
+
     /*Test Case for Sorting India Census Data based on State Population in Json File*/
     @Test
     public void giveIndianStateData_WhenSortOnPopulation_ShouldReturnMinimumPopulatesState() {
@@ -266,7 +265,32 @@ public class CensusAnalyserTest {
             Assert.assertEquals(607688, indiaCensusCSV[indiaCensusCSV.length - 1].population);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
+        }
+    }
+    /*Test Case for Sorting India Census Data based on State Population Density in Json File*/
+    @Test
+    public void giveIndianStateData_WhenSortOnPopulationDensity_ShouldReturnMaximumDenseState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.PopulationDensityWiseSortedCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals(1102, indiaCensusCSV[0].densityPerSqKm);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Test
+    public void giveIndianStateData_WhenSortOnPopulationDensity_ShouldReturnMinimumDenseState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortCensusData = censusAnalyser.PopulationDensityWiseSortedCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals(50, indiaCensusCSV[indiaCensusCSV.length - 1].densityPerSqKm);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
         }
     }
 }
