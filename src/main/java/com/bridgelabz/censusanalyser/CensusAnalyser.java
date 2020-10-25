@@ -178,6 +178,24 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.FILE_OR_HEADER_PROBLEM);
         }
     }
+    /*Method To Return JSON File Of States According to State Area in Decreasing order*/
+    public String areaWiseSortedCensusData() throws CensusAnalyserException {
+        try (Writer writer = new FileWriter("./src/test/resources/IndiaStateAreaDataJson.json")) {
+            if (censusCSVList == null || censusCSVList.size() == 0) {
+                throw new CensusAnalyserException("No data", CensusAnalyserException.ExceptionType.NO_DATA);
+            }
+            Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.areaInSqKm);
+            this.SortInDecreasingOrder(censusComparator);
+            String json = new Gson().toJson(censusCSVList);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusCSVList, writer);
+            return json;
+
+        } catch (RuntimeException | IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.FILE_OR_HEADER_PROBLEM);
+        }
+    }
 
     /* Generic Method to extract Count */
     private <E> int getCount(Iterator<E> iterator) {
